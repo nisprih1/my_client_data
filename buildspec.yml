@@ -3,18 +3,21 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      python: 3.8
+      python: 3.9
     commands:
-      - echo Installing dependencies...
-      - pip install -r requirements.txt
+      - echo Installing Python dependencies...
+      - pip install --upgrade pip
+      - pip install requests boto3 pandas  # add any other libraries your script needs
+
   build:
     commands:
+      - echo lets try to build
       - echo Running ETL script...
-      - python etl_script.py
+      - python upload_from_ip.py
+
   post_build:
     commands:
+      - echo Checking if output file exists...
+      - ls -l
       - echo Uploading output file to S3...
-      - aws s3 cp output_file.csv s3://your-output-bucket/path/output_file.csv
-artifacts:
-  files:
-    - output_file.csv
+      - aws s3 cp client_data.csv s3://myc-lient-bucket/output_file.csv
