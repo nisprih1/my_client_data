@@ -1,0 +1,20 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.8
+    commands:
+      - echo Installing dependencies...
+      - pip install -r requirements.txt
+  build:
+    commands:
+      - echo Running ETL script...
+      - python etl_script.py
+  post_build:
+    commands:
+      - echo Uploading output file to S3...
+      - aws s3 cp output_file.csv s3://your-output-bucket/path/output_file.csv
+artifacts:
+  files:
+    - output_file.csv
