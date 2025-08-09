@@ -1,56 +1,87 @@
-# Local Server  to S3 File Uploader
+#  My Client Data Upload Project
 
-This is a simple Python project that reads a CSV file from your local machine using its IP address and uploads it automatically to an AWS S3 bucket.
-
----
-## Project Overview
-- Uses Python’s built-in HTTP server to expose a local CSV file
-- A Python script fetches the file via IP and uploads it to AWS S3 using  `boto3`
-- Useful for simulating a client machine sending data to cloud storage
+##  Overview
+This project automates the process of fetching CSV data from a client (via local or remote HTTP) and uploading it to **AWS S3**.  
+It can be run locally or through **AWS CodeBuild** for a fully automated ETL workflow.
 
 ---
 
-## ▶ How to Run
+##  Components
 
-### 1. Place your CSV file
-Put your `data.csv` in a folder like:
-C:\Users\UsersName\My_Client_Data\
+| File | Description |
+|------|-------------|
+| `upload_from_ip.py` | Python script that downloads CSV from a provided IP/URL and uploads to S3. |
+| `client_data.csv` | Sample dataset for testing. |
+| `buildspec.yml` | AWS CodeBuild configuration file to automate installation, script execution, and upload to S3. |
 
-### 2. Start local HTTP server
-In Command Prompt:
+---
 
-cd C:\Users\UsersName\My_Client_Data\
-python -m http.server 8000
+##  Usage Guide
 
-### 3. Set up AWS CLI
+### Host CSV Locally (Optional Test)
+```bash
+cd path/to/csv
+python3 -m http.server 8000
+```
+Access in browser or via script:
+```
+http://<your-ip>:8000/client_data.csv
+```
 
-Run:
+---
 
+### Configure AWS CLI
+```bash
 aws configure
-
-Enter your AWS access key
-secret key
-region (e.g. ap-south-1)
-and output format (e.g. csv)
-
-### 4. Run the Python script
-Update and run `upload_from_ip.py` with your IP and bucket name:
-
-file_url = 'http://<your-ip>:8000/Laptop_data.csv'
-bucket_name = 'your-s3-bucket-name'
-
-Run it in terminal or PyCharm:
-
-python upload_from_ip.py
+```
+- **Access Key**: Your AWS access key  
+- **Secret Key**: Your AWS secret key  
+- **Region**: Example `ap-south-1`  
+- **Output**: `json`
 
 ---
 
-## Output
+### Update Script Variables
+In `upload_from_ip.py`, update:
+```python
+file_url = "http://<your-ip>:8000/client_data.csv"
+bucket_name = "your-s3-bucket"
+```
 
-The file will be uploaded to your S3 bucket inside the folder:
-client-logs/Laptop_data.csv
+---
+
+### Run Script Locally
+```bash
+python upload_from_ip.py
+```
+If the script processes correctly, you’ll see:
+```
+ File uploaded successfully to S3
+```
+
+---
+
+### Run in AWS CodeBuild
+The `buildspec.yml` will:
+1. Install Python dependencies (`requests`, `boto3`, `pandas`, etc.)
+2. Run `upload_from_ip.py`
+3. Upload the output CSV to your S3 bucket
+
+**Build command output example:**
+```
+Installing dependencies...
+Running ETL script...
+File uploaded successfully
+```
+
+---
+
+## Notes
+- Ensure `upload_from_ip.py` creates `output_file.csv` or update `buildspec.yml` to upload the correct filename (e.g., `client_data.csv`).
+- Make sure your S3 bucket exists before running CodeBuild.
 
 ---
 
 ## Author
-Tara Chand Gurjar
+**Tara Chand Gurjar**  
+Passionate about data pipelines, AWS services, and cloud automation.
