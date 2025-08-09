@@ -84,4 +84,3 @@ File uploaded successfully
 
 ## Author
 **Tara Chand Gurjar**  
-Passionate about data pipelines, AWS services, and cloud automation.
