@@ -17,7 +17,7 @@ phases:
   post_build:
     commands:
       - echo Uploading output file to S3...
-      - aws s3 cp output_file.csv s3://your-output-bucket/path/output_file.csv
+      - aws s3 cp output_file.csv s3://myc-lient-bucket/output_file.csv
 
 artifacts:
   files:
